@@ -1,7 +1,11 @@
 package com.example.stand.Models;
 
-public class Stand {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
+public class Stand {
+    @Id
     private long id;
     private String name;
 

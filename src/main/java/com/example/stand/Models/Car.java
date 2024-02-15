@@ -1,18 +1,29 @@
 package com.example.stand.Models;
 
+import com.example.stand.Enums.CarStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Car {
 
+    @Id
     private long id;
     private String licensePlate;
     private String brand;
     private String model;
     private String color;
+    @Column(name = "car_year")
     private String year;
     private String price;
     private String description;
+    private CarStatus status;
 
 
-    public Car(String licensePlate, String brand, String model, String color, String year, String price, String description) {
+
+    public Car(String licensePlate, String brand, String model, String color,
+               String year, String price, String description,CarStatus status) {
         this.id = 0;
         this.licensePlate = licensePlate;
         this.brand = brand;
@@ -21,10 +32,19 @@ public class Car {
         this.year = year;
         this.price = price;
         this.description = description;
+        this.status = status;
     }
 
     public long getId() {
         return id;
+    }
+
+    public CarStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CarStatus status) {
+        this.status = status;
     }
 
     public String getLicensePlate() {
