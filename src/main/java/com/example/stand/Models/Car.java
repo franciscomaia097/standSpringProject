@@ -1,14 +1,13 @@
 package com.example.stand.Models;
 
 import com.example.stand.Enums.CarStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Car {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String licensePlate;
     private String brand;
