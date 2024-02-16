@@ -1,6 +1,7 @@
 package com.example.stand.Controllers;
 
 import com.example.stand.Models.Car;
+import com.example.stand.Models.Stand;
 import com.example.stand.Services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +22,9 @@ public class CarController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCar(@RequestBody Car car) {
+    public ResponseEntity<?> addCar(@RequestBody Car car, @RequestBody Stand stand) {
         try {
-            Car savedCar = carService.addCar(car, car.getSeller());
+            Car savedCar = carService.addCar(car, car.getSeller(), stand);
             return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

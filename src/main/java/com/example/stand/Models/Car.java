@@ -13,6 +13,9 @@ public class Car {
     @ManyToOne
     private Seller seller;
 
+    @ManyToOne
+    private Stand stand;
+
     private String licensePlate;
     private String brand;
     private String model;
@@ -44,6 +47,14 @@ public class Car {
 
     public long getId() {
         return id;
+    }
+
+    public Stand getStand(){
+        return stand;
+    }
+
+    public void setStand(Stand stand){
+        this.stand = stand;
     }
 
     public Seller getSeller(){

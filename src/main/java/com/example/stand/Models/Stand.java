@@ -14,7 +14,7 @@ public class Stand {
     private String name;
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "stand", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars;
 
     private static Stand instance;
