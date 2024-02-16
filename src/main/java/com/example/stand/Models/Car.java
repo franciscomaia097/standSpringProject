@@ -9,6 +9,10 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @ManyToOne
+    private Seller seller;
+
     private String licensePlate;
     private String brand;
     private String model;
@@ -40,6 +44,14 @@ public class Car {
 
     public long getId() {
         return id;
+    }
+
+    public Seller getSeller(){
+        return seller;
+    }
+
+    public void setSeller(Seller seller){
+        this.seller = seller;
     }
 
     public void setId(long id) {

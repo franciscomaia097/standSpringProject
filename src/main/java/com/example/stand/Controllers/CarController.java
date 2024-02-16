@@ -21,9 +21,13 @@ public class CarController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Car> addCar(@RequestBody Car car) {
-        Car savedCar = carService.addCar(car);
-        return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
+    public ResponseEntity<?> addCar(@RequestBody Car car) {
+        try {
+            Car savedCar = carService.addCar(car, car.getSeller());
+            return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/all")
