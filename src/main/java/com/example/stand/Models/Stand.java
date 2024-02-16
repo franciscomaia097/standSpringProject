@@ -12,17 +12,24 @@ public class Stand {
     @Id
     private long id;
     private String name;
-
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars;
 
+    private static Stand instance;
 
-    public Stand(String name, String email) {
+    private Stand(String name, String email) {
         this.id = 0;
         this.name = name;
         this.email = email;
+    }
+
+    public static Stand getInstance(String name, String email) {
+        if (instance == null) {
+            instance = new Stand(name, email);
+        }
+        return instance;
     }
 
     public List<Car> getCars() {
@@ -40,6 +47,7 @@ public class Stand {
     public void setId(long id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
