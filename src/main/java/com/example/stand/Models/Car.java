@@ -17,9 +17,13 @@ public class Car {
     private String year;
     private String price;
     private String description;
+
+    @Enumerated(EnumType.STRING)
     private CarStatus status;
 
 
+    public Car() {
+    }
 
     public Car(String licensePlate, String brand, String model, String color,
                String year, String price, String description,CarStatus status) {
@@ -36,6 +40,10 @@ public class Car {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public CarStatus getStatus() {
