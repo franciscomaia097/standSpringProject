@@ -28,18 +28,18 @@ public class CarController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCar(@RequestBody Car car, @RequestBody Stand stand) {
+    public ResponseEntity<?> addCar(@RequestBody Car car) {
         try {
-            if (car.getSeller() == null || stand == null) {
+            if (car.getSeller() == null || car.getStand() == null) {
                 return new ResponseEntity<>("Seller or Stand is null", HttpStatus.BAD_REQUEST);
             }
             if (!sellerRepository.existsById(car.getSeller().getId())) {
                 return new ResponseEntity<>("Seller does not exist", HttpStatus.BAD_REQUEST);
             }
-            if (!standRepository.existsById(stand.getId())) {
+            if (!standRepository.existsById(car.getStand().getId())) {
                 return new ResponseEntity<>("Stand does not exist", HttpStatus.BAD_REQUEST);
             }
-            Car savedCar = carService.addCar(car, car.getSeller(), stand);
+            Car savedCar = carService.addCar(car, car.getSeller(), car.getStand());
             return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -47,6 +47,7 @@ public class CarController {
             return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<Car>> getAllCars() {

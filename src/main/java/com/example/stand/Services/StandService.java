@@ -16,11 +16,32 @@ public class StandService {
     }
 
     public Stand createStand(String name, String email) {
-        Stand stand = Stand.getInstance(name, email);
-        return standRepository.save(stand);
+        // Check if a stand already exists in the database
+        Stand existingStand = standRepository.findAll().stream().findFirst().orElse(null);
+
+        if (existingStand != null) {
+            // Update the existing stand's properties if necessary
+            existingStand.setName(name);
+            existingStand.setEmail(email);
+            return standRepository.save(existingStand);
+        } else {
+            // Create a new stand if none exists
+            Stand newStand = new Stand(name, email);
+            return standRepository.save(newStand);
+        }
     }
 
-    public Stand getStand(){
-        return Stand.getInstance(null, null);
+
+    public Stand getStand() {
+        Stand stand = standRepository.findAll().stream().findFirst().orElse(null);
+
+        if (stand == null) {
+            // If no stand exists, create a new one
+            stand = new Stand("Default Stand", "default@email.com");
+            stand = standRepository.save(stand);
+        }
+
+        return stand;
     }
+
 }
