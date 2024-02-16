@@ -2,9 +2,10 @@ package com.example.stand.Models;
 
 import com.example.stand.Enums.CarStatus;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
-public class Car {
+public class Car extends RepresentationModel<Car> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

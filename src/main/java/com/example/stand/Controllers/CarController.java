@@ -1,9 +1,11 @@
 package com.example.stand.Controllers;
 
 import com.example.stand.Models.Car;
+import com.example.stand.Models.Seller;
 import com.example.stand.Repositories.SellerRepository;
 import com.example.stand.Services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +46,15 @@ public class CarController {
     @GetMapping("/all")
     public ResponseEntity<List<Car>> getAllCars() {
         List<Car> cars = carService.getAllCars();
+        for (Car car : cars) {
+            Long id = car.getId();
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).getCarById(id)).withSelfRel());
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).updateCar(id, car)).withRel("update"));
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).removeCar(id)).withRel("delete"));
+
+            Seller seller = car.getSeller();
+            seller.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerController.class).getSellerById(seller.getId())).withSelfRel());
+        }
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
@@ -59,6 +70,7 @@ public class CarController {
         }
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCarById(@PathVariable Long id) {
         try {
@@ -66,6 +78,13 @@ public class CarController {
             if (car == null) {
                 return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
             }
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).getCarById(id)).withSelfRel());
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).updateCar(id, car)).withRel("update"));
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).removeCar(id)).withRel("delete"));
+
+            Seller seller = car.getSeller();
+            seller.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerController.class).getSellerById(seller.getId())).withSelfRel());
+
             return new ResponseEntity<>(car, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);

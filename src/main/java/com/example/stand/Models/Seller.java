@@ -4,9 +4,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity
-public class Seller {
+public class Seller extends RepresentationModel<Seller> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
