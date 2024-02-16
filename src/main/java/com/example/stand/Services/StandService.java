@@ -19,4 +19,8 @@ public class StandService {
         Stand stand = Stand.getInstance(name, email);
         return standRepository.save(stand);
     }
+
+    public Stand getStand(){
+        return Stand.getInstance(null, null);
+    }
 }
