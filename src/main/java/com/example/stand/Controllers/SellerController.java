@@ -28,4 +28,19 @@ public class SellerController {
     public List<Seller> getAllSellers() {
         return sellerService.getAllSellers();
     }
+
+    @GetMapping("/{id}")
+    public Seller getSellerById(@PathVariable Long id) {
+        return sellerService.getSellerById(id);
+    }
+
+    @PutMapping("/update")
+    public Seller updateSeller(@RequestBody Seller seller) {
+        return sellerService.updateSeller(seller);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteSeller(@PathVariable Long id) {
+        sellerService.deleteSeller(id);
+    }
 }

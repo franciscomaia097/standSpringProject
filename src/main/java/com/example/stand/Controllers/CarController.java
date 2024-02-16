@@ -46,4 +46,45 @@ public class CarController {
         List<Car> cars = carService.getAllCars();
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
+
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<?> removeCar(@PathVariable Long id) {
+        try {
+            Car removedCar = carService.removeCar(id);
+            return new ResponseEntity<>(removedCar, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCarById(@PathVariable Long id) {
+        try {
+            Car car = carService.getCarById(id);
+            if (car == null) {
+                return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(car, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateCar(@PathVariable Long id, @RequestBody Car car) {
+        try {
+            if (!carService.existsById(id)) {
+                return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
+            }
+            car.setId(id);
+            Car updatedCar = carService.updateCar(car);
+            return new ResponseEntity<>(updatedCar, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

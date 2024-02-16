@@ -30,7 +30,34 @@ public class CarService {
         }
     }
 
+    public Car updateCar(Car car) {
+        if (carRepository.existsById(car.getId())) {
+            return carRepository.save(car);
+        } else {
+            throw new IllegalArgumentException("Car does not exist");
+        }
+    }
+
+    public Car getCarById(Long id) {
+        return carRepository.findById(id).orElse(null);
+    }
+
+    public Car removeCar (Long id) {
+        Car car = carRepository.findById(id).orElse(null);
+        if (car != null) {
+            carRepository.deleteById(id);
+            return car;
+        } else {
+            throw new IllegalArgumentException("Car does not exist");
+        }
+    }
+
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }
+
+    public boolean existsById(Long id) {
+        return carRepository.existsById(id);
+    }
+
 }
