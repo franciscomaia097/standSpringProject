@@ -12,10 +12,6 @@ public class Car {
 
     @ManyToOne
     private Seller seller;
-
-    @ManyToOne
-    private Stand stand;
-
     private String licensePlate;
     private String brand;
     private String model;
@@ -28,13 +24,11 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private CarStatus status;
 
-
     public Car() {
     }
 
-    public Car(String licensePlate, String brand, String model, String color,
-               String year, String price, String description,CarStatus status) {
-        this.id = 0;
+    public Car(Seller seller, String licensePlate, String brand, String model, String color, String year, String price, String description, CarStatus status) {
+        this.seller = seller;
         this.licensePlate = licensePlate;
         this.brand = brand;
         this.model = model;
@@ -49,32 +43,16 @@ public class Car {
         return id;
     }
 
-    public Stand getStand(){
-        return stand;
-    }
-
-    public void setStand(Stand stand){
-        this.stand = stand;
-    }
-
-    public Seller getSeller(){
-        return seller;
-    }
-
-    public void setSeller(Seller seller){
-        this.seller = seller;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
 
-    public CarStatus getStatus() {
-        return status;
+    public Seller getSeller() {
+        return seller;
     }
 
-    public void setStatus(CarStatus status) {
-        this.status = status;
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
     public String getLicensePlate() {
@@ -131,5 +109,13 @@ public class Car {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CarStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CarStatus status) {
+        this.status = status;
     }
 }
