@@ -14,8 +14,12 @@ public class Car extends RepresentationModel<Car> {
     @ManyToOne
     private Seller seller;
     private String licensePlate;
-    private String brand;
-    private String model;
+
+    @ManyToOne
+    private Brand brand;
+
+    @ManyToOne
+    private Model model;
     private String color;
     @Column(name = "car_year")
     private String year;
@@ -28,7 +32,7 @@ public class Car extends RepresentationModel<Car> {
     public Car() {
     }
 
-    public Car(Seller seller, String licensePlate, String brand, String model, String color, String year, String price, String description, CarStatus status) {
+    public Car(Seller seller, String licensePlate, Brand brand, Model model, String color, String year, String price, String description, CarStatus status) {
         this.seller = seller;
         this.licensePlate = licensePlate;
         this.brand = brand;
@@ -64,21 +68,22 @@ public class Car extends RepresentationModel<Car> {
         this.licensePlate = licensePlate;
     }
 
-    public String getBrand() {
-        return brand;
-    }
+    public Brand getBrand() {
+            return brand;
+        }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+        public void setBrand(Brand brand) {
+            this.brand = brand;
+        }
 
-    public String getModel() {
-        return model;
-    }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
+        public Model getModel() {
+            return model;
+        }
+
+        public void setModel(Model model) {
+            this.model = model;
+        }
 
     public String getColor() {
         return color;
