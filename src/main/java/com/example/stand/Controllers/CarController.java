@@ -1,5 +1,6 @@
 package com.example.stand.Controllers;
 
+import com.example.stand.Enums.CarStatus;
 import com.example.stand.Models.Car;
 import com.example.stand.Models.Seller;
 import com.example.stand.Repositories.ModelRepository;
@@ -56,6 +57,24 @@ public class CarController {
             return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<?> updateCarStatus(@PathVariable Long id, @RequestBody CarStatus status) {
+        try {
+            Car car = carService.getCarById(id);
+            if (car == null) {
+                return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
+            }
+            car.setStatus(status);
+            Car updatedCar = carService.updateCar(car);
+            return new ResponseEntity<>(updatedCar, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
     @GetMapping("/all")
