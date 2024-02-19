@@ -2,6 +2,7 @@ package com.example.stand.Controllers;
 
 import com.example.stand.Models.Car;
 import com.example.stand.Models.Seller;
+import com.example.stand.Repositories.ModelRepository;
 import com.example.stand.Repositories.SellerRepository;
 import com.example.stand.Services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +20,34 @@ public class CarController {
     private final CarService carService;
     private final SellerRepository sellerRepository;
 
+    private final ModelRepository modelRepository;
+
     @Autowired
-    public CarController(CarService carService, SellerRepository sellerRepository) {
+    public CarController(CarService carService, SellerRepository sellerRepository, ModelRepository modelRepository) {
         this.carService = carService;
         this.sellerRepository = sellerRepository;
+        this.modelRepository = modelRepository;
     }
 
     @PostMapping("/add")
     public ResponseEntity<?> addCar(@RequestBody Car car) {
         try {
+            // Check if seller is null
             if (car.getSeller() == null) {
                 return new ResponseEntity<>("Seller is null", HttpStatus.BAD_REQUEST);
             }
+
+            // Check if seller exists
             if (!sellerRepository.existsById(car.getSeller().getId())) {
                 return new ResponseEntity<>("Seller does not exist", HttpStatus.BAD_REQUEST);
             }
+
+            // Check if model exists
+            if (!modelRepository.existsById(car.getModel().getId())) {
+                return new ResponseEntity<>("Model does not exist", HttpStatus.BAD_REQUEST);
+            }
+
+            // Save the car
             Car savedCar = carService.addCar(car, car.getSeller());
             return new ResponseEntity<>(savedCar, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
@@ -42,6 +56,7 @@ public class CarController {
             return new ResponseEntity<>("An error occurred while processing your request", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<Car>> getAllCars() {
