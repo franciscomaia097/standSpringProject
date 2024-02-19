@@ -1,5 +1,6 @@
 package com.example.stand.Services;
 
+import com.example.stand.Enums.CarStatus;
 import com.example.stand.Models.Car;
 import com.example.stand.Models.Seller;
 import com.example.stand.Repositories.CarRepository;
@@ -50,6 +51,10 @@ public class CarService {
         } else {
             throw new IllegalArgumentException("Car does not exist");
         }
+    }
+
+    public List<Car> getCarsByStatus(CarStatus status) {
+        return carRepository.findByStatus(status);
     }
 
     public List<Car> getAllCars() {

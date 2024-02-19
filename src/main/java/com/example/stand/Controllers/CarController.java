@@ -75,7 +75,20 @@ public class CarController {
         }
     }
 
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Car>> getCarsByStatus(@PathVariable CarStatus status) {
+        List<Car> cars = carService.getCarsByStatus(status);
+        for (Car car : cars) {
+            Long id = car.getId();
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).getCarById(id)).withSelfRel());
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).updateCar(id, car)).withRel("update"));
+            car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).removeCar(id)).withRel("delete"));
 
+            Seller seller = car.getSeller();
+            seller.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerController.class).getSellerById(seller.getId())).withSelfRel());
+        }
+        return new ResponseEntity<>(cars, HttpStatus.OK);
+    }
 
     @GetMapping("/all")
     public ResponseEntity<List<Car>> getAllCars() {
