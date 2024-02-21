@@ -6,12 +6,18 @@ import com.example.stand.Models.Seller;
 import com.example.stand.Repositories.ModelRepository;
 import com.example.stand.Repositories.SellerRepository;
 import com.example.stand.Services.CarService;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RestController
@@ -90,10 +96,14 @@ public class CarController {
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
+
+    @Autowired
+    private PagedResourcesAssembler<Car> assembler;
+
     @GetMapping("/all")
-    public ResponseEntity<List<Car>> getAllCars() {
-        List<Car> cars = carService.getAllCars();
-        for (Car car : cars) {
+    public ResponseEntity<PagedModel<EntityModel<Car>>> getAllCars(@PageableDefault(size = 1) Pageable pageable) {
+        Page<Car> cars = carService.getAllCars(pageable);
+        PagedModel<EntityModel<Car>> collModel = assembler.toModel(cars, car -> {
             Long id = car.getId();
             car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).getCarById(id)).withSelfRel());
             car.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarController.class).updateCar(id, car)).withRel("update"));
@@ -101,9 +111,12 @@ public class CarController {
 
             Seller seller = car.getSeller();
             seller.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SellerController.class).getSellerById(seller.getId())).withSelfRel());
-        }
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+
+            return EntityModel.of(car);
+        });
+        return new ResponseEntity<>(collModel, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<?> removeCar(@PathVariable Long id) {

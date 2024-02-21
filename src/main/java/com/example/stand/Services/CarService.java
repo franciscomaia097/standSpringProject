@@ -5,9 +5,11 @@ import com.example.stand.Models.Car;
 import com.example.stand.Models.Seller;
 import com.example.stand.Repositories.CarRepository;
 import com.example.stand.Repositories.SellerRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Service
@@ -65,4 +67,7 @@ public class CarService {
         return carRepository.existsById(id);
     }
 
+    public Page<Car> getAllCars(Pageable pageable) {
+        return carRepository.findAll(pageable);
+    }
 }
