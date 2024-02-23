@@ -64,16 +64,16 @@ public class CarController {
         }
     }
 
-    @PutMapping("/status/{id}")
-    public ResponseEntity<?> updateCarStatus(@PathVariable Long id, @RequestBody CarStatus status) {
+    @PutMapping("/sell/{id}")
+    public ResponseEntity<?> sellCar(@PathVariable Long id) {
         try {
             Car car = carService.getCarById(id);
             if (car == null) {
                 return new ResponseEntity<>("Car does not exist", HttpStatus.BAD_REQUEST);
             }
-            car.setStatus(status);
-            Car updatedCar = carService.updateCar(car);
-            return new ResponseEntity<>(updatedCar, HttpStatus.OK);
+            car.setStatus(CarStatus.SOLD);
+            Car soldCar = carService.updateCar(car);
+            return new ResponseEntity<>(soldCar, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
